@@ -1,0 +1,76 @@
+/**
+ * Admin-specific Styles
+ *
+ * Admin-facing styles for the plugin.
+ *
+ * @link       ${PLUGIN_URI}
+ * @since      1.0.0
+ *
+ * @package    ${PLUGIN_NAMESPACE}
+ */
+
+/* Plugin settings page styles */
+.${PLUGIN_SLUG}-settings-page {
+  max-width: 1200px;
+  
+  .form-table {
+    margin-top: 2em;
+    
+    th {
+      width: 250px;
+      padding: 20px 10px 20px 0;
+    }
+    
+    td {
+      padding: 15px 10px;
+      vertical-align: top;
+      
+      .description {
+        margin-top: 8px;
+        color: #646970;
+        font-style: italic;
+      }
+      
+      input[type="text"],
+      input[type="number"],
+      select,
+      textarea {
+        width: 400px;
+        max-width: 100%;
+      }
+    }
+  }
+  
+  .submit {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #f0f0f1;
+  }
+}
+
+/* Admin notices */
+.${PLUGIN_SLUG}-admin-notice {
+  position: relative;
+  padding: 1px 12px;
+  border-left: 4px solid #00a32a;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  margin: 15px 0;
+  
+  &.${PLUGIN_SLUG}-error {
+    border-left-color: #d63638;
+  }
+  
+  &.${PLUGIN_SLUG}-warning {
+    border-left-color: #dba617;
+  }
+  
+  &.${PLUGIN_SLUG}-info {
+    border-left-color: #72aee6;
+  }
+  
+  p {
+    margin: 0.5em 0;
+    padding: 2px;
+  }
+} 
