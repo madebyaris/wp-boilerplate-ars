@@ -14,8 +14,8 @@
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "${AUTHOR_NAME}",
-            "email": "${AUTHOR_EMAIL}"
+            "name": "Aris",
+            "email": "arissetia.m@gmail.com"
         }
     ],
     "minimum-stability": "stable",
@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "${NAMESPACE}\\": "includes/"
+            "MadeByAris\\WPBoilerplate\\": "includes/"
         },
         "files": [
             "includes/core/functions.php"
@@ -60,7 +60,7 @@
             "@composer dump-autoload --working-dir=./dist/scoped"
         ],
         "i18n": [
-            "vendor/bin/wp i18n make-pot . languages/${PLUGIN_SLUG}.pot --domain=${PLUGIN_SLUG} --exclude=vendor,node_modules,dist,tests"
+            "vendor/bin/wp i18n make-pot . languages/wp-boilerplate.pot --domain=wp-boilerplate --exclude=vendor,node_modules,dist,tests"
         ],
         "build": [
             "@i18n",
@@ -68,7 +68,7 @@
         ],
         "plugin:zip": [
             "@build",
-            "@composer archive --format=zip --file=${PLUGIN_SLUG} --dir=./dist"
+            "@composer archive --format=zip --file=wp-boilerplate --dir=./dist"
         ]
     },
     "config": {
