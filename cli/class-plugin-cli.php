@@ -212,33 +212,58 @@ class WP_Boilerplate_CLI {
         );
 
         try {
+            // Get the plugin root directory (one level up from CLI directory)
+            $plugin_root = dirname(dirname(__FILE__));
+            
             // Create the new plugin directory
-            $target_dir = dirname( $this->plugin_path ) . '/' . $options['slug'];
+            $target_dir = dirname($plugin_root) . '/' . $options['slug'];
 
-            if ( file_exists( $target_dir ) ) {
+            if (file_exists($target_dir)) {
                 echo "Error: Directory $target_dir already exists.\n";
                 return 1;
             }
-
+            
             echo "Initializing new plugin in $target_dir\n";
-            mkdir( $target_dir, 0755, true );
+            mkdir($target_dir, 0755, true);
+            
+            // Copy plugin files from the main plugin root
+            $this->copy_plugin_files($plugin_root, $target_dir, $replacements, $options);
 
-            // Copy template files
-            $this->copy_plugin_files( $this->plugin_path, $target_dir, $replacements, $options );
+            // Copy CLI files with correct paths
+            $this->copy_cli_files($target_dir);
 
             // Update composer.json if dev dependencies are not needed
-            if ( ! $options['dev_deps'] ) {
+            if (!$options['dev_deps']) {
                 $composer_file = $target_dir . '/composer.json';
-                if ( file_exists( $composer_file ) ) {
-                    $composer_json = json_decode( file_get_contents( $composer_file ), true );
-                    unset( $composer_json['require-dev'] );
-                    unset( $composer_json['scripts']['test'] );
-                    unset( $composer_json['scripts']['phpcs-setup'] );
-                    unset( $composer_json['scripts']['post-install-cmd'] );
-                    unset( $composer_json['scripts']['post-update-cmd'] );
-                    file_put_contents( $composer_file, json_encode( $composer_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
+                if (file_exists($composer_file)) {
+                    $composer_json = json_decode(file_get_contents($composer_file), true);
+                    unset($composer_json['require-dev']);
+                    unset($composer_json['scripts']['test']);
+                    unset($composer_json['scripts']['phpcs-setup']);
+                    unset($composer_json['scripts']['post-install-cmd']);
+                    unset($composer_json['scripts']['post-update-cmd']);
+                    file_put_contents($composer_file, json_encode($composer_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
                 }
             }
+
+            // Create main plugin file with the correct name
+            $source_file = $plugin_root . '/wp-boilerplate-ars.php';
+            $target_file = $target_dir . '/' . $options['slug'] . '.php';
+            
+            if (file_exists($source_file)) {
+                $content = file_get_contents($source_file);
+                
+                // Replace template variables
+                foreach ($replacements as $search => $replace) {
+                    $content = str_replace($search, $replace, $content);
+                }
+                
+                // Write the content to the target file
+                file_put_contents($target_file, $content);
+            }
+            
+            // Update PHP version in composer.json and phpcs.xml.dist
+            $this->update_php_version( $target_dir, $options['php'] );
 
             // Remove block-related files if block support is not needed
             if ( ! $options['blocks'] ) {
@@ -248,15 +273,6 @@ class WP_Boilerplate_CLI {
                 mkdir( $target_dir . '/blocks', 0755, true );
                 file_put_contents( $target_dir . '/blocks/.gitkeep', '# This directory contains block files.' );
             }
-
-            // Update PHP version in composer.json and phpcs.xml.dist
-            $this->update_php_version( $target_dir, $options['php'] );
-
-            // Rename main plugin file
-            rename( 
-                $target_dir . '/wp-boilerplate-ars.php', 
-                $target_dir . '/' . $options['slug'] . '.php' 
-            );
 
             echo "Plugin initialized successfully.\n";
             echo "Next steps:\n";
@@ -451,57 +467,62 @@ class WP_Boilerplate_CLI {
     }
 
     /**
-     * Copy plugin files with replacements
+     * Copy plugin files to the target directory
      *
      * @since    1.0.0
      * @param    string    $source_dir      Source directory.
      * @param    string    $target_dir      Target directory.
      * @param    array     $replacements    Template replacements.
-     * @param    array     $options         Command options.
+     * @param    array     $options         Plugin options.
      */
     private function copy_plugin_files( $source_dir, $target_dir, $replacements, $options ) {
-        $exclude_dirs = array( '.git', '.github', 'vendor', 'node_modules' );
-        $dir = new DirectoryIterator( $source_dir );
-
-        foreach ( $dir as $file ) {
-            if ( $file->isDot() ) {
+        // Directories to exclude
+        $exclude_dirs = array( '.git', '.github', 'vendor', 'node_modules', 'cli' );
+        
+        // Files to exclude
+        $exclude_files = array( 'README.md', '.DS_Store', 'wp-boilerplate-ars.php' );
+        
+        // Scan source directory
+        $items = scandir($source_dir);
+        
+        foreach ($items as $item) {
+            // Skip dot files/directories
+            if ($item == '.' || $item == '..') {
                 continue;
             }
-
-            $source_path = $file->getPathname();
-            $filename = $file->getFilename();
-
-            if ( in_array( $filename, $exclude_dirs ) ) {
+            
+            $source_path = $source_dir . '/' . $item;
+            $target_path = $target_dir . '/' . $item;
+            
+            // Skip excluded directories
+            if (is_dir($source_path) && in_array($item, $exclude_dirs)) {
                 continue;
             }
-
-            if ( $filename === 'cli' ) {
-                continue; // Skip the CLI directory
+            
+            // Skip excluded files
+            if (is_file($source_path) && in_array($item, $exclude_files)) {
+                continue;
             }
-
-            $target_path = $target_dir . '/' . $filename;
-
-            if ( $file->isDir() ) {
-                // Create the target directory
-                mkdir( $target_path, 0755, true );
-                // Recursively copy files
-                $this->copy_plugin_files( $source_path, $target_path, $replacements, $options );
+            
+            if (is_dir($source_path)) {
+                // Create target directory
+                if (!file_exists($target_path)) {
+                    mkdir($target_path, 0755, true);
+                }
+                
+                // Recursively copy directory contents
+                $this->copy_plugin_files($source_path, $target_path, $replacements, $options);
             } else {
-                // Skip files that shouldn't be copied
-                if ( $filename === 'README.md' || $filename === '.DS_Store' ) {
-                    continue;
-                }
-
-                // Read the file content
-                $content = file_get_contents( $source_path );
-
+                // Copy file with replacements
+                $content = file_get_contents($source_path);
+                
                 // Replace template variables
-                foreach ( $replacements as $search => $replace ) {
-                    $content = str_replace( $search, $replace, $content );
+                foreach ($replacements as $search => $replace) {
+                    $content = str_replace($search, $replace, $content);
                 }
-
-                // Write the content to the target file
-                file_put_contents( $target_path, $content );
+                
+                // Write content to target file
+                file_put_contents($target_path, $content);
             }
         }
     }
@@ -868,5 +889,128 @@ class WP_Boilerplate_CLI {
         $name = implode( '_', array_map( 'ucfirst', explode( '_', $name ) ) );
         
         return $name;
+    }
+
+    /**
+     * Copy CLI files to the new plugin with the correct path
+     *
+     * @since    1.0.0
+     * @param    string    $target_dir      Target directory.
+     */
+    private function copy_cli_files($target_dir) {
+        // Create CLI directory
+        $cli_dir = $target_dir . '/cli';
+        if (!file_exists($cli_dir)) {
+            mkdir($cli_dir, 0755, true);
+        }
+        
+        // 1. Create the cli.php file
+        $cli_content = <<<'EOT'
+#!/usr/bin/env php
+<?php
+/**
+ * Plugin CLI Command Runner
+ */
+
+// Get the plugin path (one directory up from this file)
+$plugin_path = dirname(__FILE__);
+
+// Load the CLI class
+require_once $plugin_path . '/class-plugin-cli.php';
+
+// Create a CLI instance
+$cli = new Plugin_CLI($plugin_path);
+
+// Run the CLI commands
+$exit_code = $cli->run($argv);
+
+// Exit with the appropriate code
+exit($exit_code);
+EOT;
+        file_put_contents($cli_dir . '/cli.php', $cli_content);
+        chmod($cli_dir . '/cli.php', 0755);
+        
+        // 2. Create a simplified class-plugin-cli.php file
+        $plugin_cli_class = <<<'EOT'
+<?php
+/**
+ * Plugin CLI Command Class
+ */
+
+class Plugin_CLI {
+    /**
+     * Plugin path
+     *
+     * @var string
+     */
+    private $plugin_path;
+    
+    /**
+     * Constructor
+     *
+     * @param string $plugin_path Plugin path
+     */
+    public function __construct($plugin_path) {
+        $this->plugin_path = dirname($plugin_path);
+    }
+    
+    /**
+     * Run CLI commands
+     *
+     * @param array $args Command arguments
+     * @return int Exit code
+     */
+    public function run($args) {
+        // Remove script name from args
+        array_shift($args);
+        
+        if (empty($args)) {
+            echo "No command specified.\n";
+            echo "Available commands: help\n";
+            return 1;
+        }
+        
+        $command = array_shift($args);
+        
+        switch ($command) {
+            case 'help':
+                $this->show_help();
+                return 0;
+            default:
+                echo "Unknown command: $command\n";
+                echo "Run 'php cli/cli.php help' for available commands.\n";
+                return 1;
+        }
+    }
+    
+    /**
+     * Show help information
+     */
+    private function show_help() {
+        echo "Plugin CLI Tool\n";
+        echo "Usage: php cli/cli.php [command] [arguments]\n\n";
+        echo "Available commands:\n";
+        echo "  help           Show this help information\n";
+    }
+}
+EOT;
+        file_put_contents($cli_dir . '/class-plugin-cli.php', $plugin_cli_class);
+        
+        // 3. Create a wp-cli script in the plugin root
+        $wp_cli_content = <<<'EOT'
+#!/usr/bin/env php
+<?php
+/**
+ * Plugin CLI Command Runner
+ */
+
+// Get the plugin path
+$plugin_path = dirname(__FILE__);
+
+// Load and execute the CLI
+require_once $plugin_path . '/cli/cli.php';
+EOT;
+        file_put_contents($target_dir . '/plugin-cli', $wp_cli_content);
+        chmod($target_dir . '/plugin-cli', 0755);
     }
 } 
