@@ -27,7 +27,9 @@
         "squizlabs/php_codesniffer": "^3.7",
         "wp-coding-standards/wpcs": "^2.3",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
-        "phpcompatibility/phpcompatibility-wp": "^2.1"
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "humbug/php-scoper": "^0.17.0",
+        "wp-cli/i18n-command": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -52,11 +54,44 @@
         ],
         "post-create-project-cmd": [
             "php wp-boilerplate --setup"
+        ],
+        "scoper": [
+            "vendor/bin/php-scoper add-prefix --output-dir=./dist/scoped --force",
+            "@composer dump-autoload --working-dir=./dist/scoped"
+        ],
+        "i18n": [
+            "vendor/bin/wp i18n make-pot . languages/${PLUGIN_SLUG}.pot --domain=${PLUGIN_SLUG} --exclude=vendor,node_modules,dist,tests"
+        ],
+        "build": [
+            "@i18n",
+            "@scoper"
+        ],
+        "plugin:zip": [
+            "@build",
+            "@composer archive --format=zip --file=${PLUGIN_SLUG} --dir=./dist"
         ]
     },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
+    },
+    "archive": {
+        "exclude": [
+            "/.git", 
+            "/.github", 
+            "/node_modules", 
+            "/tests", 
+            "/assets/src", 
+            "/.editorconfig", 
+            "/.gitignore", 
+            "/phpunit.xml", 
+            "/scoper.inc.php", 
+            "/webpack.config.js", 
+            "/vite.config.js", 
+            "/.eslintrc", 
+            "/package.json", 
+            "/package-lock.json"
+        ]
     }
 } 

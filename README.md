@@ -105,6 +105,30 @@ See all available options with:
 ./wp-boilerplate help
 ```
 
+## Production Build
+
+When you're ready to prepare your plugin for distribution, the following Composer commands are available:
+
+| Command | Description |
+| ------- | ----------- |
+| `composer scoper` | Scopes the plugin Composer dependencies to prevent namespace conflicts with other plugins. |
+| `composer build` | Run the plugin build process for production i.e. updating the translation POT file, and prefixing namespace. |
+| `composer plugin:zip` | Creates a zip file of the plugin for distribution. Based on the Composer archive. [Refer to the documentation](https://getcomposer.org/doc/03-cli.md#archive) for the available options to run the command. |
+
+### Dependency Isolation
+
+The `scoper` command uses [PHP-Scoper](https://github.com/humbug/php-scoper) to prefix all your dependencies with a unique namespace, preventing conflicts with other plugins that might use the same libraries. The prefixed code is placed in the `dist/scoped` directory.
+
+You can configure scoping behavior in the `scoper.inc.php` file.
+
+### Internationalization
+
+The `build` command includes generating POT translation files for your plugin using WP-CLI's i18n command. This ensures your plugin is ready for translation.
+
+### Distribution
+
+The `plugin:zip` command creates a production-ready ZIP file in the `dist` directory, excluding development files like tests, source assets, and configuration files.
+
 ## After initialization
 
 After creating a new plugin, navigate to its directory and run:

@@ -24,6 +24,7 @@ yarn.lock
 composer.lock
 
 # Build files
+/dist/
 /assets/dist/
 /blocks/*/build/
 
