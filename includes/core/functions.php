@@ -2,11 +2,11 @@
 /**
  * Core plugin functions
  *
- * @link       ${PLUGIN_URI}
+ * @link       https://github.com/madebyaris/wp-boilerplate
  * @since      1.0.0
  *
- * @package    ${PLUGIN_NAMESPACE}
- * @subpackage ${PLUGIN_NAMESPACE}/includes/core
+ * @package    MadeByAris\WPBoilerplate
+ * @subpackage MadeByAris\WPBoilerplate\Core
  */
 
 // If this file is called directly, abort.
@@ -22,7 +22,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @param    mixed     $default        Default value to return if option is not set.
  * @return   mixed                     The option value.
  */
-function ${PLUGIN_PREFIX}_get_option( $option_name, $default = false ) {
+function wp_boilerplate_get_option( $option_name, $default = false ) {
     $option = get_option( $option_name, $default );
     
     /**
@@ -33,7 +33,7 @@ function ${PLUGIN_PREFIX}_get_option( $option_name, $default = false ) {
      * @param string $option_name The option name
      * @param mixed $default Default value
      */
-    return apply_filters( '${PLUGIN_PREFIX}_get_option', $option, $option_name, $default );
+    return apply_filters( 'wp_boilerplate_get_option', $option, $option_name, $default );
 }
 
 /**
@@ -43,7 +43,7 @@ function ${PLUGIN_PREFIX}_get_option( $option_name, $default = false ) {
  * @param    string    $input    Some input string.
  * @return   string              Modified output.
  */
-function ${PLUGIN_PREFIX}_example_function( $input = '' ) {
+function wp_boilerplate_example_function( $input = '' ) {
     // Add your custom logic here
     $output = 'Modified: ' . $input;
     
@@ -54,7 +54,7 @@ function ${PLUGIN_PREFIX}_example_function( $input = '' ) {
      * @param string $output The function output
      * @param string $input The function input
      */
-    return apply_filters( '${PLUGIN_PREFIX}_example_function', $output, $input );
+    return apply_filters( 'wp_boilerplate_example_function', $output, $input );
 }
 
 /**
@@ -64,8 +64,8 @@ function ${PLUGIN_PREFIX}_example_function( $input = '' ) {
  * @param    string    $path    The relative path to the asset.
  * @return   string             The full URL to the asset.
  */
-function ${PLUGIN_PREFIX}_asset_url( $path ) {
-    $url = ${PLUGIN_PREFIX}_PLUGIN_URL . trim( $path, '/' );
+function wp_boilerplate_asset_url( $path ) {
+    $url = defined('WP_BOILERPLATE_PLUGIN_URL') ? WP_BOILERPLATE_PLUGIN_URL . trim( $path, '/' ) : '/' . trim( $path, '/' );
     
     /**
      * Filter the asset URL
@@ -74,7 +74,7 @@ function ${PLUGIN_PREFIX}_asset_url( $path ) {
      * @param string $url The full URL to the asset
      * @param string $path The relative path to the asset
      */
-    return apply_filters( '${PLUGIN_PREFIX}_asset_url', $url, $path );
+    return apply_filters( 'wp_boilerplate_asset_url', $url, $path );
 }
 
 /**
@@ -83,7 +83,7 @@ function ${PLUGIN_PREFIX}_asset_url( $path ) {
  * @since    1.0.0
  * @return   boolean    Whether debug mode is enabled.
  */
-function ${PLUGIN_PREFIX}_is_debug() {
+function wp_boilerplate_is_debug() {
     $debug = ( defined( 'WP_DEBUG' ) && WP_DEBUG );
     
     /**
@@ -92,7 +92,7 @@ function ${PLUGIN_PREFIX}_is_debug() {
      * @since 1.0.0
      * @param boolean $debug Whether debug mode is enabled
      */
-    return apply_filters( '${PLUGIN_PREFIX}_is_debug', $debug );
+    return apply_filters( 'wp_boilerplate_is_debug', $debug );
 }
 
 /**
@@ -102,8 +102,8 @@ function ${PLUGIN_PREFIX}_is_debug() {
  * @param    mixed     $message    The message to log.
  * @param    string    $level      The log level.
  */
-function ${PLUGIN_PREFIX}_log( $message, $level = 'info' ) {
-    if ( ${PLUGIN_PREFIX}_is_debug() ) {
+function wp_boilerplate_log( $message, $level = 'info' ) {
+    if ( wp_boilerplate_is_debug() ) {
         if ( is_array( $message ) || is_object( $message ) ) {
             $message = print_r( $message, true );
         }
@@ -120,6 +120,6 @@ function ${PLUGIN_PREFIX}_log( $message, $level = 'info' ) {
          * @param string $log_message The logged message
          * @param string $level The log level
          */
-        do_action( '${PLUGIN_PREFIX}_logged_message', $log_message, $level );
+        do_action( 'wp_boilerplate_logged_message', $log_message, $level );
     }
 } 
