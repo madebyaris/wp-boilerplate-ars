@@ -20,6 +20,7 @@
 *   Ensure the plugin is secure and follows WordPress security best practices.
 *   Provide a testing framework for ensuring code quality and reliability.
 *   Create comprehensive documentation for developers.
+*   Provide production-ready build tools for dependency isolation, internationalization, and distribution.
 
 ## 2. Overall Description
 
@@ -37,6 +38,10 @@
     *   Initializing a new plugin (name, author, slug, block support).
     *   Creating an admin menu.
     *   Creating a core class file.
+*   Production build tools for:
+    *   Dependency isolation with PHP-Scoper to prevent conflicts.
+    *   Translation file generation.
+    *   Distribution package creation.
 
 **2.3. User Classes and Characteristics:** WordPress developers with basic to advanced knowledge.
 
@@ -82,6 +87,9 @@
 *   FR14: The CLI tool should provide an `add-class` command to create a core class file.
 *   FR15: Key plugin functionalities should be exposed through actions and filters, allowing other developers to modify or extend the plugin's behavior.
 *   FR16: All functions should include error handling to catch potential exceptions or failures.
+*   FR17: The plugin should provide tools for namespace isolation to prevent conflicts with other plugins.
+*   FR18: The plugin should provide internationalization (i18n) support with translation file generation.
+*   FR19: The plugin should provide a build system for creating distribution packages.
 
 **3.2. Non-Functional Requirements:**
 
@@ -195,10 +203,14 @@ plugin-name/
 │   ├── integration/
 │   └── end-to-end/
 ├── vendor/
+├── dist/
+│   ├── scoped/
+│   └── plugin-name.zip
 ├── .gitignore
 ├── phpcs.xml.dist
 ├── eslintrc.js
 ├── vite.config.js
+├── scoper.inc.php
 ├── README.md
 ├── LICENSE
 └── composer.json
@@ -276,6 +288,14 @@ Key:
 *   [ ] Configure `phpcs.xml.dist` file.  
 *   [ ] Configure `eslintrc.js` file.  
 *   [ ] Configure `vite.config.js` file.  
-*   [ ] Configure `composer.json` file.  
+*   [ ] Configure `composer.json` file.
+*   [ ] Configure `scoper.inc.php` for dependency isolation.
 
-This comprehensive PRD, file structure, and to-do list provide a solid foundation for developing a high-quality, AI-assisted WordPress plugin boilerplate. Remember to adapt and refine these documents as needed throughout the development process. Good luck!  
+**Production & Distribution:**
+
+*   [ ] Implement dependency scoping with PHP-Scoper (FR17).
+*   [ ] Configure internationalization and translation file generation (FR18).
+*   [ ] Create build process for distribution packages (FR19).
+*   [ ] Document build and distribution workflows.
+
+This comprehensive PRD, file structure, and to-do list provide a solid foundation for developing a high-quality, AI-assisted WordPress plugin boilerplate. Remember to adapt and refine these documents as needed throughout the development process. Good luck!

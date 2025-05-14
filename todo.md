@@ -64,4 +64,12 @@
 *   [x] Configure `phpcs.xml.dist` file.  
 *   [x] Configure `eslintrc.js` file.  
 *   [x] Configure `vite.config.js` file.  
-*   [x] Configure `composer.json` file.  
+*   [x] Configure `composer.json` file.
+*   [x] Configure `scoper.inc.php` for dependency isolation.
+
+**Production & Distribution:**
+
+*   [x] Implement dependency scoping with PHP-Scoper (FR17).
+*   [x] Configure internationalization and translation file generation (FR18).
+*   [x] Create build process for distribution packages (FR19).
+*   [x] Document build and distribution workflows.
