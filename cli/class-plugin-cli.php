@@ -124,7 +124,7 @@ class WP_Boilerplate_CLI {
             'author'      => '',
             'slug'        => '',
             'blocks'      => false,
-            'php'         => '7.4',
+            'php'         => '8.0',
             'uri'         => '',
             'author_uri'  => '',
             'prefix'      => '',

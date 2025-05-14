@@ -40,7 +40,7 @@
 
 **2.3. User Classes and Characteristics:** WordPress developers with basic to advanced knowledge.
 
-**2.4. Operating Environment:** WordPress 5.0 or higher, PHP 7.4 or higher.
+**2.4. Operating Environment:** WordPress 5.0 or higher, PHP 8.0 or higher.
 
 **2.5. Design and Implementation Constraints:**
 

@@ -1,7 +1,16 @@
 {
-    "name": "${PLUGIN_SLUG}",
-    "description": "${PLUGIN_DESCRIPTION}",
+    "name": "madebyaris/wp-boilerplate",
+    "description": "A modern WordPress plugin boilerplate with PSR-4 autoloading, Vite integration, and CLI tools",
     "type": "wordpress-plugin",
+    "keywords": [
+        "wordpress", 
+        "plugin", 
+        "boilerplate", 
+        "psr-4", 
+        "vite", 
+        "cli"
+    ],
+    "homepage": "https://github.com/madebyaris/wp-boilerplate",
     "license": "GPL-2.0-or-later",
     "authors": [
         {
@@ -11,7 +20,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
@@ -40,6 +49,9 @@
         ],
         "post-update-cmd": [
             "@phpcs-setup"
+        ],
+        "post-create-project-cmd": [
+            "php wp-boilerplate --setup"
         ]
     },
     "config": {

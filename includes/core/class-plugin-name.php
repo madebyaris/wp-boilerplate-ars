@@ -33,7 +33,7 @@ class Plugin_Name {
      * @access   protected
      * @var      Plugin_Loader    $loader    Maintains and registers all hooks for the plugin.
      */
-    protected $loader;
+    protected Plugin_Loader $loader;
 
     /**
      * The unique identifier of this plugin.
@@ -42,7 +42,7 @@ class Plugin_Name {
      * @access   protected
      * @var      string    $plugin_name    The string used to uniquely identify this plugin.
      */
-    protected $plugin_name;
+    protected string $plugin_name;
 
     /**
      * The current version of the plugin.
@@ -51,7 +51,7 @@ class Plugin_Name {
      * @access   protected
      * @var      string    $version    The current version of the plugin.
      */
-    protected $version;
+    protected string $version;
 
     /**
      * Define the core functionality of the plugin.
@@ -90,8 +90,7 @@ class Plugin_Name {
      * @since    1.0.0
      * @access   private
      */
-    private function load_dependencies() {
-        // The class responsible for orchestrating the actions and filters of the core plugin.
+    private function load_dependencies(): void {
         // The loader is created here since it's used immediately in this class
         $this->loader = new Plugin_Loader();
         
@@ -110,7 +109,7 @@ class Plugin_Name {
      * @since    1.0.0
      * @access   private
      */
-    private function set_locale() {
+    private function set_locale(): void {
         $plugin_i18n = new I18n();
         $plugin_i18n->set_domain( $this->plugin_name );
 
@@ -124,7 +123,7 @@ class Plugin_Name {
      * @since    1.0.0
      * @access   private
      */
-    private function define_admin_hooks() {
+    private function define_admin_hooks(): void {
         $plugin_admin = new \${PLUGIN_NAMESPACE}\Admin\Plugin_Name_Admin( $this->get_plugin_name(), $this->get_version() );
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
@@ -144,7 +143,7 @@ class Plugin_Name {
      * @since    1.0.0
      * @access   private
      */
-    private function define_public_hooks() {
+    private function define_public_hooks(): void {
         // Optional: Add public-facing hooks if needed
     }
     
@@ -155,7 +154,7 @@ class Plugin_Name {
      * @since    1.0.0
      * @access   private
      */
-    private function define_block_hooks() {
+    private function define_block_hooks(): void {
         // Add block registration hooks only if block support is enabled
         $this->loader->add_action( 'init', '${PLUGIN_NAMESPACE}\Core\block_init' );
     }
@@ -167,7 +166,7 @@ class Plugin_Name {
      * @access   private
      * @return   boolean    Whether block support is enabled
      */
-    private function is_block_support_enabled() {
+    private function is_block_support_enabled(): bool {
         // This can be modified to check a setting or constant
         // For now, we just check if the block directory exists
         return file_exists( ${PLUGIN_PREFIX}_PLUGIN_DIR . 'blocks' );
@@ -178,7 +177,7 @@ class Plugin_Name {
      *
      * @since    1.0.0
      */
-    public function run() {
+    public function run(): void {
         $this->loader->run();
         
         /**
@@ -197,7 +196,7 @@ class Plugin_Name {
      * @since     1.0.0
      * @return    string    The name of the plugin.
      */
-    public function get_plugin_name() {
+    public function get_plugin_name(): string {
         return $this->plugin_name;
     }
 
@@ -207,7 +206,7 @@ class Plugin_Name {
      * @since     1.0.0
      * @return    Plugin_Loader    Orchestrates the hooks of the plugin.
      */
-    public function get_loader() {
+    public function get_loader(): Plugin_Loader {
         return $this->loader;
     }
 
@@ -217,7 +216,7 @@ class Plugin_Name {
      * @since     1.0.0
      * @return    string    The version number of the plugin.
      */
-    public function get_version() {
+    public function get_version(): string {
         return $this->version;
     }
 } 

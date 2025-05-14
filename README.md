@@ -14,10 +14,38 @@ A modern WordPress plugin boilerplate with Vite integration, optional block supp
 
 ## Requirements
 
-- PHP 7.4 or higher
+- PHP 8.0 or higher
 - WordPress 5.0 or higher
 - Composer
 - Node.js (for Vite)
+
+## Installation
+
+### Using Composer (Recommended)
+
+The easiest way to get started is by using Composer:
+
+```bash
+composer create-project madebyaris/wp-boilerplate my-plugin
+```
+
+This will create a new plugin in the specified directory and guide you through an interactive setup process where you'll:
+- Enter your plugin name and slug
+- Provide author information
+- Set a description
+- Choose whether to include block support
+- Specify other optional settings
+
+The setup process will automatically handle file generation and configuration.
+
+### Manual Installation
+
+Clone or download this repository to your WordPress plugins directory:
+
+```bash
+git clone https://github.com/your-username/wp-boilerplate-ars.git
+cd wp-boilerplate-ars
+```
 
 ## Usage
 
@@ -46,6 +74,35 @@ A modern WordPress plugin boilerplate with Vite integration, optional block supp
 ```bash
 # Add a new class
 ./wp-boilerplate add-class --name="My_Class" --dir="core" --description="Custom functionality"
+```
+
+## CLI Tool
+
+The plugin comes with a powerful CLI tool that helps you manage and extend your plugin.
+
+### Available Commands
+
+```bash
+# Interactive plugin setup
+./wp-boilerplate --setup
+
+# Create a new admin menu
+./wp-boilerplate add-menu --title="Settings Page" --slug="settings" --capability="manage_options"
+
+# Create a new class file
+./wp-boilerplate add-class --name="API_Controller" --dir="core" --description="Handles external API connections"
+```
+
+For manual initialization without the interactive prompts, you can use:
+
+```bash
+./wp-boilerplate init --name="My Plugin" --author="Your Name" --slug="my-plugin" --blocks
+```
+
+See all available options with:
+
+```bash
+./wp-boilerplate help
 ```
 
 ## After initialization
