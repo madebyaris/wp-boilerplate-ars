@@ -2,14 +2,14 @@
 /**
  * Fired during plugin activation/deactivation
  *
- * @link       ${PLUGIN_URI}
+ * @link       https://github.com/madebyaris/wp-boilerplate
  * @since      1.0.0
  *
- * @package    ${PLUGIN_NAMESPACE}
- * @subpackage ${PLUGIN_NAMESPACE}/includes/data
+ * @package    MadeByAris\WPBoilerplate
+ * @subpackage MadeByAris\WPBoilerplate\Data
  */
 
-namespace ${PLUGIN_NAMESPACE}\Data;
+namespace MadeByAris\WPBoilerplate\Data;
 
 /**
  * Fired during plugin activation/deactivation.
@@ -17,9 +17,9 @@ namespace ${PLUGIN_NAMESPACE}\Data;
  * This class defines all code necessary to run during the plugin's activation and deactivation.
  *
  * @since      1.0.0
- * @package    ${PLUGIN_NAMESPACE}
- * @subpackage ${PLUGIN_NAMESPACE}/includes/data
- * @author     ${AUTHOR_NAME}
+ * @package    MadeByAris\WPBoilerplate
+ * @subpackage MadeByAris\WPBoilerplate\Data
+ * @author     Aris
  */
 class Install {
 
@@ -38,7 +38,7 @@ class Install {
         self::add_default_options();
         
         // Set version
-        update_option( '${PLUGIN_PREFIX}_version', '${PLUGIN_PREFIX}_VERSION' );
+        update_option( 'wp_boilerplate_version', WP_BOILERPLATE_VERSION );
         
         // Flush rewrite rules
         flush_rewrite_rules();
@@ -48,7 +48,7 @@ class Install {
          *
          * @since 1.0.0
          */
-        do_action( '${PLUGIN_PREFIX}_activated' );
+        do_action( 'wp_boilerplate_activated' );
     }
 
     /**
@@ -69,7 +69,7 @@ class Install {
          *
          * @since 1.0.0
          */
-        do_action( '${PLUGIN_PREFIX}_deactivated' );
+        do_action( 'wp_boilerplate_deactivated' );
     }
     
     /**
@@ -82,7 +82,7 @@ class Install {
         
         // Example of creating a table - uncomment if needed
         /*
-        $table_name = $wpdb->prefix . '${PLUGIN_PREFIX}_example';
+        $table_name = $wpdb->prefix . 'wp_boilerplate_example';
         $charset_collate = $wpdb->get_charset_collate();
         
         $sql = "CREATE TABLE $table_name (
@@ -106,12 +106,14 @@ class Install {
      */
     private static function add_default_options() {
         // Load default options from config file
-        $default_options = include ${PLUGIN_PREFIX}_PLUGIN_DIR . 'config/default-settings.php';
-        
-        // Add each option if it doesn't already exist
-        foreach ( $default_options as $option_name => $option_value ) {
-            if ( false === get_option( $option_name ) ) {
-                add_option( $option_name, $option_value );
+        if (defined('WP_BOILERPLATE_PLUGIN_DIR') && file_exists(WP_BOILERPLATE_PLUGIN_DIR . 'config/default-settings.php')) {
+            $default_options = include WP_BOILERPLATE_PLUGIN_DIR . 'config/default-settings.php';
+            
+            // Add each option if it doesn't already exist
+            foreach ( $default_options as $option_name => $option_value ) {
+                if ( false === get_option( $option_name ) ) {
+                    add_option( $option_name, $option_value );
+                }
             }
         }
     }

@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: ${PLUGIN_NAME}
- * Plugin URI: ${PLUGIN_URI}
- * Description: ${PLUGIN_DESCRIPTION}
+ * Plugin Name: WP Boilerplate
+ * Plugin URI: https://github.com/madebyaris/wp-boilerplate
+ * Description: A modern WordPress plugin boilerplate with PSR-4 autoloading, Vite integration, and CLI tools
  * Version: 1.0.0
- * Author: ${AUTHOR_NAME}
- * Author URI: ${AUTHOR_URI}
+ * Author: Aris
+ * Author URI: https://github.com/madebyaris
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain: ${PLUGIN_TEXT_DOMAIN}
+ * Text Domain: wp-boilerplate
  * Domain Path: /languages
  *
- * @package ${PLUGIN_NAMESPACE}
+ * @package MadeByAris\WPBoilerplate
  */
 
 // If this file is called directly, abort.
@@ -25,51 +25,51 @@ if ( file_exists( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' ) ) {
 }
 
 // Define plugin constants
-define( '${PLUGIN_PREFIX}_VERSION', '1.0.0' );
-define( '${PLUGIN_PREFIX}_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( '${PLUGIN_PREFIX}_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( '${PLUGIN_PREFIX}_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( '${PLUGIN_PREFIX}_PLUGIN_FILE', __FILE__ );
+define( 'WP_BOILERPLATE_VERSION', '1.0.0' );
+define( 'WP_BOILERPLATE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'WP_BOILERPLATE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'WP_BOILERPLATE_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WP_BOILERPLATE_PLUGIN_FILE', __FILE__ );
 
 /**
  * The code that runs during plugin activation.
  */
-function ${PLUGIN_PREFIX}_activate() {
+function wp_boilerplate_activate() {
     // Activation logic will be handled by the Install class
-    ${PLUGIN_NAMESPACE}\Data\Install::activate();
+    if (class_exists('MadeByAris\WPBoilerplate\Data\Install')) {
+        MadeByAris\WPBoilerplate\Data\Install::activate();
+    }
 }
 
 /**
  * The code that runs during plugin deactivation.
  */
-function ${PLUGIN_PREFIX}_deactivate() {
+function wp_boilerplate_deactivate() {
     // Deactivation logic will be handled by the Install class
-    ${PLUGIN_NAMESPACE}\Data\Install::deactivate();
+    if (class_exists('MadeByAris\WPBoilerplate\Data\Install')) {
+        MadeByAris\WPBoilerplate\Data\Install::deactivate();
+    }
 }
 
-register_activation_hook( __FILE__, '${PLUGIN_PREFIX}_activate' );
-register_deactivation_hook( __FILE__, '${PLUGIN_PREFIX}_deactivate' );
-
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require_once ${PLUGIN_PREFIX}_PLUGIN_DIR . 'includes/core/class-plugin-name.php';
+register_activation_hook( __FILE__, 'wp_boilerplate_activate' );
+register_deactivation_hook( __FILE__, 'wp_boilerplate_deactivate' );
 
 /**
  * Load helper functions
  * Note: Functions are not classes and need to be loaded directly
  */
-require_once ${PLUGIN_PREFIX}_PLUGIN_DIR . 'includes/core/functions.php';
+require_once WP_BOILERPLATE_PLUGIN_DIR . 'includes/core/functions.php';
 
 /**
  * Begins execution of the plugin.
  *
  * @since 1.0.0
  */
-function ${PLUGIN_PREFIX}_run() {
-    $plugin = new ${PLUGIN_NAMESPACE}\Core\Plugin_Name();
-    $plugin->run();
+function wp_boilerplate_run() {
+    if (class_exists('MadeByAris\WPBoilerplate\Core\Plugin_Name')) {
+        $plugin = new MadeByAris\WPBoilerplate\Core\Plugin_Name();
+        $plugin->run();
+    }
 }
 
-${PLUGIN_PREFIX}_run(); 
+wp_boilerplate_run(); 
